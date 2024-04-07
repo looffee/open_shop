@@ -4,8 +4,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.lang.NonNull;
 
 public record User(
-    @Id @NonNull Long id,
-    @NonNull String name,
+    @Id Long id,
+    @NonNull String firstName,
+    @NonNull String lastName,
     @NonNull String email,
     @NonNull String phone,
     String password) {
