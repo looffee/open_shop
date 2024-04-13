@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.open.shop.entity.Product;
+import com.open.shop.model.db.Product;
 import com.open.shop.repository.ProductRepository;
 
 import reactor.core.publisher.Mono;
@@ -27,7 +27,7 @@ public class ProductController {
 
   @PostMapping("/create")
   public Mono<Product> createProduct(@RequestBody Product product) {
-    return productRepository.save(product.builder().id(null).createdAt(null).updatedAt(null).build());
+    return productRepository.save(product.toBuilder().id(null).createdAt(null).updatedAt(null).build());
   }
 
   @GetMapping("/get/{id}")
@@ -37,7 +37,7 @@ public class ProductController {
 
   @PostMapping("/update/{id}")
   public Mono<Product> updateProduct(@PathVariable("id") long id, @RequestBody Product product) {
-    return productRepository.save(product.builder().id(id).build());
+    return productRepository.save(product.toBuilder().id(id).build());
   }
 
   @DeleteMapping("/delete/{id}")

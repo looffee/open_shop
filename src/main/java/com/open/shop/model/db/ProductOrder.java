@@ -1,29 +1,34 @@
-package com.open.shop.entity;
+package com.open.shop.model.db;
 
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.lang.NonNull;
+
+import com.open.shop.model.OrderStatus;
+import com.open.shop.model.PaymentStatus;
+import com.open.shop.model.ShippingStatus;
 
 import lombok.Builder;
 
 @Builder
-public record Order(
+public record ProductOrder(
     @Id Long id,
     long userId,
     long userAddressId,
     long shippingTypeId,
-    ShippingStatus shippingStatus,
+    @NonNull ShippingStatus shippingStatus,
     long paymentTypeId,
-    PaymentStatus paymentStatus,
-    OrderStatus orderStatus,
+    @NonNull PaymentStatus paymentStatus,
+    @NonNull OrderStatus orderStatus,
     String userNotes,
     @CreatedDate LocalDateTime createdAt,
     @LastModifiedDate LocalDateTime updatedAt) {
 
-  public OrderBuilder builder() {
-    return new OrderBuilder()
+  public ProductOrderBuilder toBuilder() {
+    return new ProductOrderBuilder()
         .id(id)
         .userId(userId)
         .userAddressId(userAddressId)
@@ -36,4 +41,5 @@ public record Order(
         .createdAt(createdAt)
         .updatedAt(updatedAt);
   }
+
 }

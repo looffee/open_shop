@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.open.shop.entity.Category;
+import com.open.shop.model.db.Category;
 import com.open.shop.repository.CategoryRepository;
 
 import reactor.core.publisher.Mono;
