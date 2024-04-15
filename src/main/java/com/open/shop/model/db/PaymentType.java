@@ -11,4 +11,11 @@ public record PaymentType(
     @NonNull String name,
     @NonNull String description) {
 
+  public PaymentTypeBuilder toBuilder() {
+    return new PaymentTypeBuilder()
+        .id(id)
+        .name(name)
+        .description(description);
+  }
+
 }

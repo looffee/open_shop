@@ -11,4 +11,12 @@ public record ShippingType(
     @NonNull String name,
     double price,
     @NonNull String description) {
+
+  public ShippingTypeBuilder toBuilder() {
+    return new ShippingTypeBuilder()
+        .id(id)
+        .name(name)
+        .price(price)
+        .description(description);
+  }
 }
