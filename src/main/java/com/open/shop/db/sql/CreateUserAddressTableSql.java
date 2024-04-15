@@ -14,9 +14,12 @@ public class CreateUserAddressTableSql implements CreateTableSql {
           country VARCHAR(255) NOT NULL,
           zip_code VARCHAR(255) NOT NULL,
           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY(id),
-          CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE ON UPDATE CASCADE
+          CONSTRAINT fk_user_adress_user FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
         )
         """;
   }

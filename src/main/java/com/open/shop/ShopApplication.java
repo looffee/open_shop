@@ -7,28 +7,26 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 
 import com.open.shop.db.TablesCreator;
-
 import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 public class ShopApplication {
 
-	@Autowired
-	@NonNull
-	ApplicationContext context;
+  @Autowired
+  @NonNull
+  ApplicationContext context;
 
-	@Autowired
-	@NonNull
-	TablesCreator tablesCreator;
+  @Autowired
+  @NonNull
+  TablesCreator tablesCreator;
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShopApplication.class, args);
+  public static void main(String[] args) {
+    SpringApplication.run(ShopApplication.class, args);
+  }
 
-	}
-
-	@PostConstruct
-	public void init() {
-		tablesCreator.createTables();
-	}
+  @PostConstruct
+  public void init() {
+    tablesCreator.createTables();
+  }
 
 }

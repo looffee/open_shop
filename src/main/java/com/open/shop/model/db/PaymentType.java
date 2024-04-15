@@ -9,6 +9,6 @@ import lombok.Builder;
 public record PaymentType(
     @Id Long id,
     @NonNull String name,
-    String description) {
+    @NonNull String description) {
 
 }

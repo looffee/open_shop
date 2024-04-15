@@ -1,9 +1,11 @@
 package com.open.shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.open.shop.model.api.UserAddressDto;
 import com.open.shop.model.db.UserAddress;
 import com.open.shop.repository.UserAdressRepository;
 
@@ -16,7 +18,11 @@ public class UserAddressService {
   @NonNull
   UserAdressRepository userAddressRepository;
 
-  public Mono<UserAddress> createUserAddress(UserAddress userAddress) {
+  @Autowired
+  @NonNull
+  ConversionService conversionService;
+
+  public Mono<UserAddressDto> createUserAddress(UserAddressDto userAddress) {
     return userAddressRepository.save(
         new UserAddress(
             null,
@@ -25,7 +31,10 @@ public class UserAddressService {
             userAddress.city(),
             userAddress.state(),
             userAddress.country(),
-            userAddress.zipCode()));
+            userAddress.zipCode()))
+        .map(savedAdress -> {
+          return conversionService.convert(savedAdress, UserAddressDto.class);
+        });
   }
 
 }

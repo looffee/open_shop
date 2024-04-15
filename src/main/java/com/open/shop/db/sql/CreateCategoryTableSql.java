@@ -11,10 +11,8 @@ public class CreateCategoryTableSql implements CreateTableSql {
           description VARCHAR(255),
           parent_category_id INT,
           PRIMARY KEY(id),
-          CONSTRAINT fk_parent_category FOREIGN KEY (parent_category_id) REFERENCES
-          category(id)
-          ON DELETE CASCADE
-          ON UPDATE CASCADE);
+          CONSTRAINT fk_parent_category FOREIGN KEY (parent_category_id) REFERENCES category(id)
+          );
         """;
   }
 

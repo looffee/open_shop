@@ -10,5 +10,5 @@ public record ShippingType(
     @Id Long id,
     @NonNull String name,
     double price,
-    String description) {
+    @NonNull String description) {
 }

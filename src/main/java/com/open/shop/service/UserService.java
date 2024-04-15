@@ -1,9 +1,11 @@
 package com.open.shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.open.shop.model.api.UserDto;
 import com.open.shop.model.db.User;
 import com.open.shop.repository.UserRepository;
 
@@ -16,7 +18,11 @@ public class UserService {
   @NonNull
   UserRepository userRepository;
 
-  public Mono<User> createUser(User user) {
+  @Autowired
+  @NonNull
+  ConversionService conversionService;
+
+  public Mono<UserDto> createUser(UserDto user) {
     return userRepository.save(
         new User(
             null,
@@ -24,7 +30,10 @@ public class UserService {
             user.lastName(),
             user.email(),
             user.phone(),
-            null));
+            null))
+        .map(savedUser -> {
+          return conversionService.convert(savedUser, UserDto.class);
+        });
   }
 
 }

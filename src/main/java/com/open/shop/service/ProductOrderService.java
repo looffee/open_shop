@@ -1,13 +1,15 @@
 package com.open.shop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.open.shop.model.CreateProductOrder;
 import com.open.shop.model.OrderStatus;
 import com.open.shop.model.PaymentStatus;
 import com.open.shop.model.ShippingStatus;
+import com.open.shop.model.api.CreateProductOrderRequest;
+import com.open.shop.model.api.ProductOrderDto;
 import com.open.shop.model.db.ProductOrder;
 import com.open.shop.repository.ProductOrderRepository;
 
@@ -28,21 +30,30 @@ public class ProductOrderService {
   @NonNull
   ProductOrderRepository productOrderRepository;
 
-  public Mono<ProductOrder> createProductOrder(CreateProductOrder createProductOrder) {
-    return Mono.just(null)
+  @Autowired
+  @NonNull
+  ConversionService conversionService;
+
+  public Mono<ProductOrderDto> createProductOrder(CreateProductOrderRequest request) {
+    return Mono.just(1)
         .flatMap((o) -> {
-          if (isUserNew(createProductOrder)) {
-            return userService.createUser(createProductOrder.user())
+          if (isUserNew(request)) {
+            return userService.createUser(request.user())
                 .flatMap(user -> {
                   return userAddressService
-                      .createUserAddress(createProductOrder.userAddress())
+                      .createUserAddress(
+                          request
+                              .userAddress()
+                              .toBuilder()
+                              .userId(user.id())
+                              .build())
                       .map(userAddress -> new UserAndAdressId(user.id(), userAddress.id()));
                 });
           }
 
           return Mono.just(new UserAndAdressId(
-              createProductOrder.user().id(),
-              createProductOrder.userAddress().id()));
+              request.user().id(),
+              request.userAddress().id()));
         })
         .flatMap(userAndAdressId -> {
           return productOrderRepository.save(
@@ -50,19 +61,22 @@ public class ProductOrderService {
                   .id(null)
                   .userId(userAndAdressId.userId())
                   .userAddressId(userAndAdressId.addressId())
-                  .shippingTypeId(createProductOrder.shippingTypeId())
+                  .shippingTypeId(request.shippingTypeId())
                   .shippingStatus(ShippingStatus.PACKING)
-                  .paymentTypeId(createProductOrder.paymentTypeId())
+                  .paymentTypeId(request.paymentTypeId())
                   .paymentStatus(PaymentStatus.UNPAID)
                   .orderStatus(OrderStatus.NEW)
-                  .userNotes(createProductOrder.userNotes())
+                  .userNotes(request.userNotes())
                   .createdAt(null)
                   .updatedAt(null)
-                  .build());
+                  .build())
+              .map(savedProductOrder -> {
+                return conversionService.convert(savedProductOrder, ProductOrderDto.class);
+              });
         });
   }
 
-  private Boolean isUserNew(CreateProductOrder createProductOrder) {
+  private Boolean isUserNew(CreateProductOrderRequest createProductOrder) {
     return createProductOrder.user().id() == null;
   }
 

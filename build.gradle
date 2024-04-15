@@ -19,8 +19,11 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
+  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+  implementation 'jakarta.validation:jakarta.validation-api:3.1.0-M2'
 	implementation 'org.springframework.data:spring-data-bom:2023.1.4'
 	implementation 'org.springframework.data:spring-data-r2dbc:3.2.4'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.mariadb:r2dbc-mariadb:1.2.0'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
