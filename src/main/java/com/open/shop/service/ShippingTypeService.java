@@ -48,4 +48,19 @@ public class ShippingTypeService {
         .collectList();
   }
 
+  public Mono<Void> deleteShippingType(Long id) {
+    return shippingTypeRepository.deleteById(id);
+  }
+
+  public Mono<ShippingTypeDto> updateShippingType(ShippingTypeDto shippingTypeDto) {
+    ShippingType shippingType = conversionService.convert(shippingTypeDto, ShippingType.class);
+
+    if (shippingType == null) {
+      throw new IllegalArgumentException("Failed to convert ShippingTypeDto to ShippingType.");
+    }
+
+    return shippingTypeRepository.save(shippingType)
+        .map(saved -> conversionService.convert(saved, ShippingTypeDto.class));
+  }
+
 }

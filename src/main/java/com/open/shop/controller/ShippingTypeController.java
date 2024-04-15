@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.open.shop.model.api.ShippingTypeDto;
 import com.open.shop.service.ShippingTypeService;
 
+import jakarta.validation.constraints.NotEmpty;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -26,6 +29,16 @@ public class ShippingTypeController {
   @PostMapping("/create")
   public Mono<ShippingTypeDto> createShippingType(@RequestBody ShippingTypeDto shippingType) {
     return shippingTypeService.createShippingType(shippingType);
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public Mono<Void> deleteShippingType(@PathVariable("id") @NotEmpty Long id) {
+    return shippingTypeService.deleteShippingType(id);
+  }
+
+  @PostMapping("/update")
+  public Mono<ShippingTypeDto> updateShippingType(@RequestBody ShippingTypeDto shippingType) {
+    return shippingTypeService.updateShippingType(shippingType);
   }
 
   @GetMapping("/get-all")

@@ -45,4 +45,19 @@ public class PaymentTypeService {
         .collectList();
   }
 
+  public Mono<Void> deletePaymentType(Long id) {
+    return paymentTypeRepository.deleteById(id);
+  }
+
+  public Mono<PaymentTypeDto> updatePaymentType(PaymentTypeDto paymentTypeDto) {
+    PaymentType paymentType = conversionService.convert(paymentTypeDto, PaymentType.class);
+
+    if (paymentType == null) {
+      throw new IllegalArgumentException("Failed to convert PaymentTypeDto to PaymentType.");
+    }
+
+    return paymentTypeRepository.save(paymentType)
+        .map(paymentTypeSaved -> conversionService.convert(paymentTypeSaved, PaymentTypeDto.class));
+  }
+
 }
