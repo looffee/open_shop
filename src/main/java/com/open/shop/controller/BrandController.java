@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.open.shop.model.db.Brand;
 import com.open.shop.repository.BrandRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import reactor.core.publisher.Mono;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 
+@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer")
 @RestController
 @RequestMapping("/api/brand")
 public class BrandController {
@@ -25,6 +30,7 @@ public class BrandController {
   @NonNull
   BrandRepository brandRepository;
 
+  @Operation(summary = "Create a brand", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/create")
   public Mono<Brand> createBrand(@RequestBody Brand brand) {
     return brandRepository.save(new Brand(null, brand.name(), brand.description()));

@@ -23,7 +23,8 @@ public class TablesCreator {
         new CreateUserTableSql(),
         new CreateUserAddressTableSql(),
         new CreateProductTableSql(),
-        new CreateProductOrderTableSql()
+        new CreateProductOrderTableSql(),
+        new CreateUserRoleTableSql()
     };
 
     for (CreateTableSql createTableSql : createTableSqls) {

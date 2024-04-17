@@ -1,5 +1,7 @@
 package com.open.shop.model.api;
 
+import java.io.Serializable;
+
 import jakarta.validation.constraints.*;
 
 public record UserDto(
@@ -11,6 +13,6 @@ public record UserDto(
 
     @NotBlank @Email String email,
 
-    @NotBlank String phone) {
+    @NotBlank String phone) implements Serializable {
 
 }
