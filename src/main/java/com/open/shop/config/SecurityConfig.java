@@ -1,30 +1,40 @@
 package com.open.shop.config;
 
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationEventPublisher;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.authorization.AuthorizationEventPublisher;
+import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
 @Configuration
@@ -34,7 +44,7 @@ public class SecurityConfig {
   Logger logger = LoggerFactory.getLogger(SecurityConfig.class.getName());
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests((authorize) -> {
           authorize
@@ -48,8 +58,8 @@ public class SecurityConfig {
               .requestMatchers(HttpMethod.POST, "/api/brand/create").hasAuthority("SCOPE_ADMIN")
               .anyRequest().authenticated();
         })
-        .csrf(csrf -> csrf.disable())
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+        .oauth2ResourceServer(jwt -> jwt.jwt(Customizer.withDefaults()))
+        .csrf(csrf -> csrf.disable());
 
     SecurityFilterChain chain = http.build();
 
@@ -57,25 +67,43 @@ public class SecurityConfig {
   }
 
   @Bean
-  public JwtDecoder jwtDecoder(KeyPair keyPair) {
+  public JwtDecoder jwtDecoder(KeyPair keyPair) throws Exception {
+
     return NimbusJwtDecoder.withPublicKey((RSAPublicKey) keyPair.getPublic()).build();
   }
 
   @Bean
-  public JwtEncoder jwtEncoder(KeyPair keyPair) {
-    JWK jwk = new RSAKey.Builder((RSAPublicKey) keyPair.getPublic()).privateKey(keyPair.getPrivate()).build();
-    ImmutableJWKSet<SecurityContext> jwkSet = new ImmutableJWKSet<SecurityContext>(new JWKSet(jwk));
+  public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
 
-    return new NimbusJwtEncoder(jwkSet);
+    return new NimbusJwtEncoder(jwkSource);
   }
 
   @Bean
-  public KeyPair keyPair() throws Exception {
+  public KeyPair keyPair() {
+    return generateRsaKey();
+  }
 
-    RSAKeyGenerator rsaKeyGenerator = new RSAKeyGenerator(2048);
-    RSAKey rsaKey = rsaKeyGenerator.generate();
-    KeyPair keyPair = new KeyPair(rsaKey.toPublicKey(), rsaKey.toPrivateKey());
+  @Bean
+  public JWKSource<SecurityContext> jwkSource(KeyPair keyPair) {
+    RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+    RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+    RSAKey rsaKey = new RSAKey.Builder(publicKey)
+        .privateKey(privateKey)
+        .keyID(UUID.randomUUID().toString())
+        .build();
+    JWKSet jwkSet = new JWKSet(rsaKey);
+    return new ImmutableJWKSet<>(jwkSet);
+  }
 
+  private static KeyPair generateRsaKey() {
+    KeyPair keyPair;
+    try {
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+      keyPairGenerator.initialize(2048);
+      keyPair = keyPairGenerator.generateKeyPair();
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
+    }
     return keyPair;
   }
 
@@ -83,4 +111,11 @@ public class SecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(10);
   }
+
+  @Bean
+  public AuthenticationEventPublisher authenticationEventPublisher(
+      ApplicationEventPublisher applicationEventPublisher) {
+    return new DefaultAuthenticationEventPublisher(applicationEventPublisher);
+  }
+
 }

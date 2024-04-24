@@ -34,24 +34,6 @@ public class AuthService {
 
   public Mono<String> login(UserCredentials userCredentials) {
 
-    // Instant now = Instant.now();
-
-    // JwtClaimsSet claimsSet = JwtClaimsSet.builder()
-    // .issuer("self")
-    // .subject(userCredentials.getUsername())
-    // .issuedAt(now)
-    // .expiresAt(now.plus(Duration.ofHours(1)))
-    // .claim("test", "test value")
-    // .build();
-
-    // return
-    //
-    // Mono.just(jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue());
-    return Mono.just("null");
-  }
-
-  public Mono<String> loginSupport(UserCredentials userCredentials) {
-
     return userService.authenticateUser(userCredentials)
         .flatMap(user -> {
           return userRoleService.getRolesByUserId(user.id())

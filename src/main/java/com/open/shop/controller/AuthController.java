@@ -2,6 +2,7 @@ package com.open.shop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,6 @@ public class AuthController {
   @PostMapping("/login")
   public Mono<String> login(@RequestBody LoginRequestDto loginRequestDto) {
     return authService.login(loginRequestDto);
-  }
-
-  @PostMapping("/login-support")
-  public Mono<String> loginSupport(@RequestBody LoginRequestDto loginRequestDto) {
-    return authService.loginSupport(loginRequestDto);
   }
 
 }
