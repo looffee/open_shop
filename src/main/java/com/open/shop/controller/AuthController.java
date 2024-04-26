@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.open.shop.model.api.LoginRequestDto;
 import com.open.shop.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -21,6 +22,7 @@ public class AuthController {
   @NonNull
   AuthService authService;
 
+  @Operation(summary = "Login to the system")
   @PostMapping("/login")
   public Mono<String> login(@RequestBody LoginRequestDto loginRequestDto) {
     return authService.login(loginRequestDto);

@@ -17,11 +17,8 @@ import com.open.shop.repository.BrandRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import reactor.core.publisher.Mono;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 
-@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer")
 @RestController
 @RequestMapping("/api/brand")
 public class BrandController {
@@ -36,21 +33,25 @@ public class BrandController {
     return brandRepository.save(new Brand(null, brand.name(), brand.description()));
   }
 
+  @Operation(summary = "Get a brand by id")
   @GetMapping("/get/{id}")
   public Mono<Brand> getBrand(@PathVariable long id) {
     return brandRepository.findById(id);
   }
 
+  @Operation(summary = "Update a brand by id", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/update/{id}")
   public Mono<Brand> updateBrand(@PathVariable("id") long id, @RequestBody Brand brand) {
     return brandRepository.save(new Brand(id, brand.name(), brand.description()));
   }
 
+  @Operation(summary = "Delete a brand by id", security = @SecurityRequirement(name = "bearerAuth"))
   @DeleteMapping("/delete/{id}")
   public Mono<Void> deleteBrand(@PathVariable("id") long id) {
     return brandRepository.deleteById(id);
   }
 
+  @Operation(summary = "Get all brands")
   @GetMapping("/get-all")
   public Mono<List<Brand>> getBrands() {
     return brandRepository.findAll().collectList();

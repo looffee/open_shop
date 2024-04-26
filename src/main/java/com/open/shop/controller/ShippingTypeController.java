@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.open.shop.model.api.ShippingTypeDto;
 import com.open.shop.service.ShippingTypeService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.NotEmpty;
 import reactor.core.publisher.Mono;
 
@@ -26,16 +28,19 @@ public class ShippingTypeController {
   @NonNull
   ShippingTypeService shippingTypeService;
 
+  @Operation(summary = "Create a shipping type", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/create")
   public Mono<ShippingTypeDto> createShippingType(@RequestBody ShippingTypeDto shippingType) {
     return shippingTypeService.createShippingType(shippingType);
   }
 
+  @Operation(summary = "Delete a shipping type by id", security = @SecurityRequirement(name = "bearerAuth"))
   @DeleteMapping("/delete/{id}")
   public Mono<Void> deleteShippingType(@PathVariable("id") @NotEmpty Long id) {
     return shippingTypeService.deleteShippingType(id);
   }
 
+  @Operation(summary = "Update a shipping type by id", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/update/{id}")
   public Mono<ShippingTypeDto> updateShippingType(
       @PathVariable("id") @NotEmpty long id,
@@ -43,6 +48,7 @@ public class ShippingTypeController {
     return shippingTypeService.updateShippingType(shippingType);
   }
 
+  @Operation(summary = "Get all shipping types")
   @GetMapping("/get-all")
   public Mono<List<ShippingTypeDto>> getAllShippingTypes() {
     return shippingTypeService.getAllShippingTypes();

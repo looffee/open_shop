@@ -14,6 +14,7 @@ import com.open.shop.model.api.CreateProductOrderRequest;
 import com.open.shop.model.api.ProductOrderDto;
 import com.open.shop.service.ProductOrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import reactor.core.publisher.Mono;
 
@@ -31,6 +32,7 @@ public class ProductOrderController {
   @NonNull
   Validator validator;
 
+  @Operation(summary = "Create a product order")
   @PostMapping("/create")
   public Mono<ProductOrderDto> createProductOrder(@Valid @RequestBody CreateProductOrderRequest requestBody) {
     return productOrderService.createProductOrder(requestBody);
