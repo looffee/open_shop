@@ -36,8 +36,10 @@ public class PaymentTypeController {
     return paymentTypeService.deletePaymentType(id);
   }
 
-  @PostMapping("/update")
-  public Mono<PaymentTypeDto> updatePaymentType(@RequestBody PaymentTypeDto paymentType) {
+  @PostMapping("/update/{id}")
+  public Mono<PaymentTypeDto> updatePaymentType(
+      @PathVariable("id") @NotEmpty long id,
+      @RequestBody PaymentTypeDto paymentType) {
     return paymentTypeService.updatePaymentType(paymentType);
   }
 

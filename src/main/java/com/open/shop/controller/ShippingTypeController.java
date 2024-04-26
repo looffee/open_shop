@@ -36,8 +36,10 @@ public class ShippingTypeController {
     return shippingTypeService.deleteShippingType(id);
   }
 
-  @PostMapping("/update")
-  public Mono<ShippingTypeDto> updateShippingType(@RequestBody ShippingTypeDto shippingType) {
+  @PostMapping("/update/{id}")
+  public Mono<ShippingTypeDto> updateShippingType(
+      @PathVariable("id") @NotEmpty long id,
+      @RequestBody ShippingTypeDto shippingType) {
     return shippingTypeService.updateShippingType(shippingType);
   }
 

@@ -4,6 +4,8 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -14,22 +16,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
-import org.springframework.security.authorization.AuthorizationEventPublisher;
-import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -45,17 +40,24 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
+
+    List<HttpSecurityCustomizer> httpSecurityCustomizers = Arrays.asList(
+        new BrandControllerSecurityCustomizer(),
+        new AuthControllerSecurityCustomizer(),
+        new ShippingTypeControllerSecurityCustomizer(),
+        new PaymentTypeSecurityCustomizer(),
+        new ProductOrderControllerSecurityCustomizer(),
+        new CategoryControllerSecurityCustomizer(),
+        new SwaggerDocsSecurityCustomizer(),
+        new ProductControllerSecurityCustomizer());
+
+    for (HttpSecurityCustomizer customizer : httpSecurityCustomizers) {
+      http.authorizeHttpRequests(customizer);
+    }
+
     http
         .authorizeHttpRequests((authorize) -> {
           authorize
-              .requestMatchers(HttpMethod.GET, "/swagger-ui.html/**").permitAll()
-              .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-              .requestMatchers(HttpMethod.GET, "/v3/api-docs/swagger-config").permitAll()
-              .requestMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
-              .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-              .requestMatchers(HttpMethod.POST, "/api/auth/login-support").permitAll()
-              .requestMatchers(HttpMethod.GET, "/api/shipping-type/get-all").permitAll()
-              .requestMatchers(HttpMethod.POST, "/api/brand/create").hasAuthority("SCOPE_ADMIN")
               .anyRequest().authenticated();
         })
         .oauth2ResourceServer(jwt -> jwt.jwt(Customizer.withDefaults()))
