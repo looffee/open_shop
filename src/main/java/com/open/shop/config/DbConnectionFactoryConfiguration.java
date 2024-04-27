@@ -14,7 +14,7 @@ import io.r2dbc.spi.ConnectionFactory;
 @EnableR2dbcRepositories
 public class DbConnectionFactoryConfiguration extends AbstractR2dbcConfiguration {
 
-  @Value("${com.open.shop.db.type}")
+  @Value("${DB_TYPE:mySql}")
   private String dbType;
 
   @Autowired

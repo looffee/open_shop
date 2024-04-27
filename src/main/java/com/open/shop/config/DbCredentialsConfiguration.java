@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DbCredentialsConfiguration {
 
-  @Value("${com.open.shop.db.host}")
+  @Value("${DB_HOST:localhost}")
   private String host;
-  @Value("${com.open.shop.db.port}")
+  @Value("${DB_PORT:3306}")
   private int port;
-  @Value("${com.open.shop.db.username}")
+  @Value("${DB_USERNAME:root}")
   private String username;
-  @Value("${com.open.shop.db.password}")
+  @Value("${DB_PASSWORD:my-secret-pw}")
   private String password;
-  @Value("${com.open.shop.db.database}")
+  @Value("${DB_DATABASE:open_shop_test}")
   private String database;
 
   @Bean
