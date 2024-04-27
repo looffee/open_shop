@@ -37,3 +37,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task('dockerBuild', type: Exec) {
+  commandLine 'docker', 'build', '-t', 'open_shop_server', '--build-arg', 'JAR_FILE=build/libs/shop-0.0.1-SNAPSHOT.jar', '.'
+}
