@@ -20,7 +20,7 @@ public class CreateUserAddressTableSql implements CreateTableSql {
           CONSTRAINT fk_user_adress_user FOREIGN KEY (user_id) REFERENCES user(id)
             ON DELETE CASCADE
             ON UPDATE CASCADE
-        )
+        ) ENGINE = InnoDB
         """;
   }
 

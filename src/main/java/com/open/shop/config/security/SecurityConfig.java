@@ -1,4 +1,4 @@
-package com.open.shop.config;
+package com.open.shop.config.security;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

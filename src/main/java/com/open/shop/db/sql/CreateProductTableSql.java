@@ -20,13 +20,15 @@ public class CreateProductTableSql implements CreateTableSql {
           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             ON UPDATE CURRENT_TIMESTAMP,
+          UNIQUE(name),
           PRIMARY KEY(id),
           CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category(id)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
           CONSTRAINT fk_product_brand FOREIGN KEY (brand_id) REFERENCES brand(id)
             ON DELETE CASCADE
-            ON UPDATE CASCADE);
+            ON UPDATE CASCADE
+        ) ENGINE = InnoDB;
         """;
   }
 

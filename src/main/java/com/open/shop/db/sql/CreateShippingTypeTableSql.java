@@ -13,8 +13,9 @@ public class CreateShippingTypeTableSql implements CreateTableSql {
           created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
             ON UPDATE CURRENT_TIMESTAMP,
+          UNIQUE(name),
           PRIMARY KEY(id)
-        )
+        ) ENGINE = InnoDB
         """;
   }
 

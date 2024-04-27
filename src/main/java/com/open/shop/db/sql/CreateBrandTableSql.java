@@ -9,7 +9,9 @@ public class CreateBrandTableSql implements CreateTableSql {
           id INT AUTO_INCREMENT NOT NULL,
           name VARCHAR(255) NOT NULL,
           description VARCHAR(255),
-          PRIMARY KEY(id));
+          UNIQUE(name),
+          PRIMARY KEY(id)
+        ) ENGINE = InnoDB;
         """;
   }
 

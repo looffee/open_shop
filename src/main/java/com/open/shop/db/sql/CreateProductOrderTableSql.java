@@ -31,7 +31,7 @@ public class CreateProductOrderTableSql implements CreateTableSql {
           CONSTRAINT fk_product_order_payment_type FOREIGN KEY (payment_type_id) REFERENCES payment_type(id)
             ON DELETE CASCADE
             ON UPDATE CASCADE
-        )
+        ) ENGINE = InnoDB
         """;
   }
 }

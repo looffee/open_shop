@@ -17,7 +17,7 @@ public class CreateUserTableSql implements CreateTableSql {
             ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY(id),
           UNIQUE(phone)
-        )
+        ) ENGINE = InnoDB
         """;
   }
 

@@ -13,7 +13,7 @@ public class CreateUserRoleTableSql implements CreateTableSql {
           CONSTRAINT fk_user_role_user_id FOREIGN KEY (user_id) REFERENCES user(id)
             ON DELETE CASCADE
             ON UPDATE CASCADE
-        )
+        ) ENGINE = InnoDB
         """;
   }
 

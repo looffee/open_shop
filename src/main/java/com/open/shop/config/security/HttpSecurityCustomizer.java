@@ -1,4 +1,4 @@
-package com.open.shop.config;
+package com.open.shop.config.security;
 
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
