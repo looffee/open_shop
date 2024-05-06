@@ -10,9 +10,11 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
@@ -26,6 +28,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -39,6 +46,24 @@ public class SecurityConfig {
   Logger logger = LoggerFactory.getLogger(SecurityConfig.class.getName());
 
   @Bean
+  @Order(1)
+  public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+
+    http
+        .headers(customizer -> {
+          customizer.httpStrictTransportSecurity(hsts -> hsts.disable());
+        })
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+        .csrf(csrf -> csrf.disable());
+
+    SecurityFilterChain chain = http.build();
+
+    return chain;
+  }
+
+  @Bean
+  @Order(2)
   public SecurityFilterChain securityFilterChain2(HttpSecurity http) throws Exception {
 
     List<HttpSecurityCustomizer> httpSecurityCustomizers = Arrays.asList(
@@ -56,16 +81,30 @@ public class SecurityConfig {
     }
 
     http
+        .cors(cors -> cors.disable())
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests((authorize) -> {
           authorize
               .anyRequest().authenticated();
         })
-        .oauth2ResourceServer(jwt -> jwt.jwt(Customizer.withDefaults()))
-        .csrf(csrf -> csrf.disable());
+        .oauth2ResourceServer(jwt -> jwt.jwt(Customizer.withDefaults()));
 
     SecurityFilterChain chain = http.build();
 
     return chain;
+  }
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.addAllowedOrigin("http://localhost:4200");
+    configuration.addAllowedMethod("*");
+    configuration.addAllowedHeader("Content-type");
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
   }
 
   @Bean

@@ -1,0 +1,49 @@
+<form
+  class="flex flex-col p-4 gap-4 items-center"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-form-field
+    style="width: 200px"
+    appearance="outline"
+    subscriptSizing="dynamic"
+  >
+    <mat-label>Phone number</mat-label>
+    <input
+      matInput
+      type="text"
+      id="phoneNumber"
+      name="phoneNumber"
+      formControlName="phoneNumber"
+    />
+    <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">
+      Field is required
+    </mat-error>
+    <mat-error *ngIf="form.get('phoneNumber')?.hasError('pattern')">
+      Not a valid phone number
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field
+    style="width: 200px"
+    appearance="outline"
+    subscriptSizing="dynamic"
+  >
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      type="password"
+      id="password"
+      name="password"
+      formControlName="password"
+    />
+    <mat-error *ngIf="form.get('password')?.hasError('required')">
+      Field is required
+    </mat-error>
+    <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+      Must be at least 8 characters long
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="submit">Sign in</button>
+</form>

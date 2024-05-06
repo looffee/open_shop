@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { BrandService } from '../services';
 import { Brand } from '../models';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from '../shared.module';
+import { MaterialModule } from '../material.module';
 
 @Component({
   selector: 'app-root-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [SharedModule, MaterialModule],
   templateUrl: './root-page.component.html',
   styleUrl: './root-page.component.scss',
 })

@@ -1,3 +1,119 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+// Plus imports for other components in your app.
+
+@use "@angular/material/core/theming/_palette.scss" as mat-palette;
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+@include mat.core();
+
+$green-palette: (
+  50: #e7f6e6,
+  100: #c6e7c1,
+  200: #a0d899,
+  300: #78c96f,
+  400: #58be4e,
+  500: #35b228,
+  600: #2aa31f,
+  700: #199111,
+  800: #008000,
+  900: #006100,
+  contrast: (
+    50: mat-palette.$dark-primary-text,
+    100: mat-palette.$dark-primary-text,
+    200: mat-palette.$dark-primary-text,
+    300: mat-palette.$dark-primary-text,
+    400: mat-palette.$dark-primary-text,
+    500: mat-palette.$dark-primary-text,
+    600: mat-palette.$light-primary-text,
+    700: mat-palette.$light-primary-text,
+    800: mat-palette.$light-primary-text,
+    900: mat-palette.$light-primary-text,
+  ),
+);
+
+$purple-palette: (
+  50: #f4e3f0,
+  100: #e3badb,
+  200: #d08cc4,
+  300: #bc5dac,
+  400: #ad399c,
+  500: #9d0d8c,
+  600: #910887,
+  700: #800080,
+  800: #710078,
+  900: #55006b,
+  contrast: (
+    50: mat-palette.$dark-primary-text,
+    100: mat-palette.$dark-primary-text,
+    200: mat-palette.$dark-primary-text,
+    300: mat-palette.$dark-primary-text,
+    400: mat-palette.$dark-primary-text,
+    500: mat-palette.$dark-primary-text,
+    600: mat-palette.$light-primary-text,
+    700: mat-palette.$light-primary-text,
+    800: mat-palette.$light-primary-text,
+    900: mat-palette.$light-primary-text,
+  ),
+);
+
+$red-palette: (
+  50: #ffe9eb,
+  100: #fdc9cb,
+  200: #ea948e,
+  300: #de6b62,
+  400: #e44a3b,
+  500: #e63a1a,
+  600: #d82f1c,
+  700: #c72417,
+  800: #ba1c0f,
+  900: #ab0b00,
+  contrast: (
+    50: mat-palette.$dark-primary-text,
+    100: mat-palette.$dark-primary-text,
+    200: mat-palette.$dark-primary-text,
+    300: mat-palette.$dark-primary-text,
+    400: mat-palette.$dark-primary-text,
+    500: mat-palette.$dark-primary-text,
+    600: mat-palette.$light-primary-text,
+    700: mat-palette.$light-primary-text,
+    800: mat-palette.$light-primary-text,
+    900: mat-palette.$light-primary-text,
+  ),
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$open_shop_frontend-primary: mat.define-palette($purple-palette, 700);
+$open_shop_frontend-accent: mat.define-palette($green-palette);
+
+// The warn palette is optional (defaults to red).
+$open_shop_frontend-warn: mat.define-palette($red-palette, 900);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$open_shop_frontend-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $open_shop_frontend-primary,
+      accent: $open_shop_frontend-accent,
+      warn: $open_shop_frontend-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+// @include mat.core-theme($open_shop_frontend-theme);
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($open_shop_frontend-theme);
+
 /* You can add global styles to this file, and also import other style files */
 
 @tailwind base;
@@ -5,10 +121,24 @@
 @tailwind utilities;
 
 @import "./assets/light.css";
+@import "./assets/dark.css";
 @import "./assets/colors.module.css";
 
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  border-style: none;
 }
