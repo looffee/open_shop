@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { SharedModule } from '../shared.module';
 import { MaterialModule } from '../material.module';
 import { AuthService } from '../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -24,6 +25,7 @@ export class SignInPageComponent {
       Validators.minLength(8),
     ]),
   });
+  readonly router = inject(Router);
 
   onSubmit() {
     if (this.form.invalid) throw new Error('Invalid form');
@@ -37,7 +39,7 @@ export class SignInPageComponent {
 
     this.authService.signIn(phoneNumber, password).subscribe({
       next: () => {
-        console.log('Signed in');
+        this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Failed to sign in', error);

@@ -4,7 +4,23 @@
       <div class="title">
         <h1>Open shop</h1>
       </div>
-      <a mat-button routerLink="/sign-in"> Sign in </a>
+      <a
+        *ngIf="!userServices.isAuthenticated()"
+        mat-button
+        color="primary"
+        routerLink="/sign-in"
+      >
+        Sign in
+      </a>
+      <a
+        *ngIf="userServices.isAuthenticated()"
+        (click)="logout()"
+        mat-button
+        color="primary"
+        routerLink="/"
+      >
+        Logout
+      </a>
     </div>
   </div>
 </header>

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, afterNextRender } from '@angular/core';
 import { SharedModule } from './shared.module';
 import { MaterialModule } from './material.module';
+import { AuthService, JwtTokenStorageService, UserService } from './services';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtAuthHeaderWriterInterceptor } from './interceptors';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +11,21 @@ import { MaterialModule } from './material.module';
   imports: [SharedModule, MaterialModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  providers: [
+    JwtTokenStorageService,
+    UserService,
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: JwtAuthHeaderWriterInterceptor,
+      multi: true,
+    },
+  ],
 })
 export class AppComponent {
-  title = 'open_shop_frontend';
+  constructor(jstStorageService: JwtTokenStorageService) {
+    afterNextRender(() => {
+      jstStorageService.checkToken();
+    });
+  }
 }

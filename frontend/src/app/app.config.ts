@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -6,15 +6,13 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { API_SERVER_URL } from './providers/api-server-url';
 import {
   HTTP_INTERCEPTORS,
-  HttpHandler,
   HttpInterceptor,
-  HttpRequest,
   provideHttpClient,
   withFetch,
-  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { JwtAuthHeaderWriterInterceptor } from './interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +37,7 @@ export const appConfig: ApplicationConfig = {
       deps: [API_SERVER_URL],
       multi: true,
     },
-    provideHttpClient(withFetch(), withInterceptorsFromDi()), provideAnimationsAsync(),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    provideAnimationsAsync(),
   ],
 };

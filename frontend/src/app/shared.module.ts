@@ -4,13 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { MaterialModule } from './material.module';
 
 const components = [HeaderComponent, FooterComponent];
 
 const modules = [CommonModule, FormsModule, ReactiveFormsModule, RouterModule];
 
 @NgModule({
-  imports: modules,
+  imports: [...modules, MaterialModule],
   exports: [...modules, ...components],
   declarations: [...components],
   providers: [],
