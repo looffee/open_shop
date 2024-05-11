@@ -124,6 +124,11 @@ $open_shop_frontend-theme: mat.define-light-theme(
 @import "./assets/dark.css";
 @import "./assets/colors.module.css";
 
+/* Core Grid CSS */
+@import "ag-grid-community/styles/ag-grid.css";
+/* Quartz Theme Specific CSS */
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+
 body {
   display: flex;
   flex-direction: column;

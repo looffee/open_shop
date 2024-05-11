@@ -1,0 +1,22 @@
+<div class="flex flex-col gap-4">
+  <h2 class="text-2xl">Categories</h2>
+
+  <mat-card appearance="outlined" style="width: fit-content">
+    <app-create-category-form
+      class="p-4"
+      [parentCategories]="categories()"
+      [loading]="loading()"
+      (formSubmit)="createCategory($event)"
+    />
+  </mat-card>
+
+  <mat-error *ngIf="error()">
+    {{ error() | json }}
+  </mat-error>
+
+  <div
+    #gridContainer
+    class="ag-theme-quartz"
+    [style.height.px]="gridHeight"
+  ></div>
+</div>

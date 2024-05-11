@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.open.shop.model.api.CategoryDto;
 import com.open.shop.model.db.Category;
 import com.open.shop.repository.CategoryRepository;
+import com.open.shop.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,6 +28,10 @@ public class CategoryController {
   @Autowired
   @NonNull
   CategoryRepository categoryRepository;
+
+  @Autowired
+  @NonNull
+  CategoryService categoryService;
 
   @Operation(summary = "Create a category", security = @SecurityRequirement(name = "bearerAuth"))
   @PostMapping("/create")
@@ -57,6 +63,12 @@ public class CategoryController {
   @GetMapping("/get-all")
   public Mono<List<Category>> getCategories() {
     return categoryRepository.findAll().collectList();
+  }
+
+  @Operation(summary = "Get root categories")
+  @GetMapping("/get-root")
+  public Mono<List<CategoryDto>> getRootCategories() {
+    return categoryService.getRootCategories();
   }
 
 }

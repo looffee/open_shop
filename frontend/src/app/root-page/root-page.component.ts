@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { BrandService } from '../services';
-import { Brand } from '../models';
+import { BrandService, CategoryService } from '../services';
+import { Brand, Category } from '../models';
 import { SharedModule } from '../shared.module';
 import { MaterialModule } from '../material.module';
 
@@ -12,13 +12,13 @@ import { MaterialModule } from '../material.module';
   styleUrl: './root-page.component.scss',
 })
 export class RootPageComponent {
-  brandService = inject(BrandService);
+  readonly categoryService = inject(CategoryService);
 
-  brands: Brand[] = [];
+  categories: Category[] = [];
 
   constructor() {
-    this.brandService.getBrands().subscribe((response) => {
-      this.brands = response;
+    this.categoryService.getRootCategories().subscribe((categories) => {
+      this.categories = categories;
     });
   }
 }

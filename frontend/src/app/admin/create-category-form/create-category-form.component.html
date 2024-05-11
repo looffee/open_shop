@@ -1,0 +1,73 @@
+<form
+  [formGroup]="form"
+  (submit)="submit()"
+  class="flex flex-col gap-4 items-center"
+>
+  <h1 class="text-2xl">Create category form</h1>
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input
+      type="text"
+      autocomplete="off"
+      name="name"
+      matInput
+      formControlName="name"
+    />
+    <mat-error *ngIf="form.controls.name.hasError('required')">
+      Field is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea
+      type="text"
+      autocomplete="off"
+      name="description"
+      matInput
+      formControlName="description"
+    ></textarea>
+    <mat-error *ngIf="form.controls.description.hasError('required')">
+      Field is required
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Parent category</mat-label>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="parentCategorySelected($event)"
+    >
+      <mat-option
+        *ngFor="let category of filteredCategories()"
+        [value]="category.id"
+      >
+        {{ category.name }}
+      </mat-option>
+    </mat-autocomplete>
+    <input
+      type="text"
+      [matAutocomplete]="auto"
+      matInput
+      [(ngModel)]="autocompleteModel"
+      [ngModelOptions]="{ standalone: true }"
+      [disabled]="loading()"
+    />
+  </mat-form-field>
+  <div class="flex flex-row gap-4 items-center">
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      [disabled]="loading()"
+    >
+      Create category
+    </button>
+
+    <mat-progress-spinner
+      *ngIf="loading()"
+      color="primary"
+      mode="indeterminate"
+      diameter="30"
+    />
+  </div>
+</form>
