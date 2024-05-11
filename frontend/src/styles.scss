@@ -147,3 +147,15 @@ body {
 * {
   border-style: none;
 }
+
+a {
+  color: map-get($map: $purple-palette, $key: 700);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: map-get($map: $purple-palette, $key: 500);
+  }
+}

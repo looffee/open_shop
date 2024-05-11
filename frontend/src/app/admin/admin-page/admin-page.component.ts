@@ -2,15 +2,13 @@ import { Component } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 import { MaterialModule } from '../../material.module';
 
-import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
-import { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
-import { RouterModule } from '@angular/router';
-import { CategoriesPageComponent } from '../categories-page/categories-page.component';
+import { AgGridAngular } from 'ag-grid-angular';
+import { NavPanelComponent } from '../nav-panel/nav-panel.component';
 
 @Component({
   selector: 'app-admin-page',
   standalone: true,
-  imports: [SharedModule, MaterialModule, AgGridAngular],
+  imports: [SharedModule, MaterialModule, AgGridAngular, NavPanelComponent],
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss',
 })

@@ -4,23 +4,33 @@
       <div class="title">
         <h1>Open shop</h1>
       </div>
-      <a
-        *ngIf="!userServices.isAuthenticated()"
-        mat-button
-        color="primary"
-        routerLink="/sign-in"
-      >
-        Sign in
-      </a>
-      <a
-        *ngIf="userServices.isAuthenticated()"
-        (click)="logout()"
-        mat-button
-        color="primary"
-        routerLink="/"
-      >
-        Logout
-      </a>
+      <div class="flex flex-row gap-4">
+        <a
+          *ngIf="userServices.isAdmin()"
+          mat-button
+          color="primary"
+          routerLink="/admin"
+        >
+          Admin
+        </a>
+        <a
+          *ngIf="!userServices.isAuthenticated()"
+          mat-button
+          color="primary"
+          routerLink="/sign-in"
+        >
+          Sign in
+        </a>
+        <a
+          *ngIf="userServices.isAuthenticated()"
+          (click)="logout()"
+          mat-button
+          color="primary"
+          routerLink="/"
+        >
+          Logout
+        </a>
+      </div>
     </div>
   </div>
 </header>

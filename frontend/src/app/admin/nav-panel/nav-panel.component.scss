@@ -1,0 +1,19 @@
+a {
+  position: relative;
+}
+
+.active {
+  padding-left: 12px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background-color: #800080;
+  }
+}

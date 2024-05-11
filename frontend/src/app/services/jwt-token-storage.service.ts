@@ -1,4 +1,11 @@
-import { Injectable, PLATFORM_ID, Signal, inject, signal } from '@angular/core';
+import {
+  Injectable,
+  PLATFORM_ID,
+  Signal,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable()
@@ -6,8 +13,9 @@ export class JwtTokenStorageService {
   private TOKEN_KEY = 'jwt-token';
   readonly platformId = inject(PLATFORM_ID);
 
-  private readonly _hasToken = signal<boolean>(false);
-  readonly hasToken: Signal<boolean> = this._hasToken;
+  private readonly _token = signal<string | null>(null);
+  readonly token: Signal<string | null> = this._token;
+  readonly hasToken: Signal<boolean> = computed(() => this.token() !== null);
 
   constructor() {}
 
@@ -31,15 +39,15 @@ export class JwtTokenStorageService {
 
   saveToken(token: string): void {
     this.storage.setItem(this.TOKEN_KEY, token);
-    this._hasToken.set(true);
+    this._token.set(token);
   }
 
   removeToken(): void {
     this.storage.removeItem(this.TOKEN_KEY);
-    this._hasToken.set(false);
+    this._token.set(null);
   }
 
   checkToken(): void {
-    this._hasToken.set(this.getToken() !== null);
+    this._token.set(this.getToken());
   }
 }
