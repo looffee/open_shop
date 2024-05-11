@@ -1,9 +1,12 @@
 import { Component, afterNextRender } from '@angular/core';
 import { SharedModule } from './shared.module';
 import { MaterialModule } from './material.module';
-import { AuthService, JwtTokenStorageService, UserService } from './services';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtAuthHeaderWriterInterceptor } from './interceptors';
+import {
+  AuthService,
+  CategoryService,
+  JwtTokenStorageService,
+  UserService,
+} from './services';
 
 @Component({
   selector: 'app-root',
@@ -11,16 +14,7 @@ import { JwtAuthHeaderWriterInterceptor } from './interceptors';
   imports: [SharedModule, MaterialModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers: [
-    JwtTokenStorageService,
-    UserService,
-    AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useExisting: JwtAuthHeaderWriterInterceptor,
-      multi: true,
-    },
-  ],
+  providers: [UserService, AuthService, CategoryService],
 })
 export class AppComponent {
   constructor(jstStorageService: JwtTokenStorageService) {

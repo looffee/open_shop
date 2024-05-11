@@ -8,6 +8,7 @@ import {
   effect,
   ViewContainerRef,
   NgZone,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import {
@@ -51,6 +52,7 @@ export class CategoriesPageComponent {
   readonly vcr = inject(ViewContainerRef);
   readonly dialogService = inject(MatDialog);
   readonly zone = inject(NgZone);
+  readonly cdr = inject(ChangeDetectorRef);
 
   @ViewChild('gridContainer')
   readonly gridContainer: ElementRef<HTMLElement> | null = null;
@@ -63,7 +65,7 @@ export class CategoriesPageComponent {
 
   grid: GridApi | null = null;
 
-  readonly gridHeight = window.innerHeight * 0.8;
+  gridHeight: number = 0;
 
   constructor() {
     this.categoryService.getAllCategories().subscribe(() => null);
@@ -74,6 +76,9 @@ export class CategoriesPageComponent {
       if (container == undefined) {
         throw new Error('Grid container not found');
       }
+
+      this.gridHeight = window.innerHeight * 0.8;
+      this.cdr.detectChanges();
 
       const colDefs: ColDef[] = [
         { field: 'id', filter: true },
@@ -96,23 +101,28 @@ export class CategoriesPageComponent {
         },
       ];
 
-      this.grid = createGrid(container, {
-        columnDefs: colDefs,
-        rowData: this.categories(),
-        suppressScrollOnNewData: true,
-        rowSelection: 'multiple',
-        onSelectionChanged: (event: SelectionChangedEvent<Category>) => {},
+      this.zone.runOutsideAngular(() => {
+        this.grid = createGrid(container, {
+          columnDefs: colDefs,
+          rowData: this.categories(),
+          suppressScrollOnNewData: true,
+          rowSelection: 'multiple',
+          onSelectionChanged: (event: SelectionChangedEvent<Category>) => {},
+        });
       });
     });
 
     effect(() => {
       const categories = this.categories();
 
-      if (this.grid == null) {
-        throw new Error('Grid not initialized');
-      }
+      this.zone.runOutsideAngular(() => {
+        if (this.grid == null) {
+          console.error('Grid does not exist!');
+          return;
+        }
 
-      this.grid.setGridOption('rowData', categories);
+        this.grid.setGridOption('rowData', categories);
+      });
     });
   }
 

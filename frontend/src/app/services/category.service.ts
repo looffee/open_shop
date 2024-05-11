@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Signal, computed, inject, signal } from '@angular/core';
-import { Observable, tap, empty, of, map } from 'rxjs';
+import { Observable, tap, of, map } from 'rxjs';
 import { Category } from '../models';
 
 interface CreateCategory {
@@ -9,9 +9,7 @@ interface CreateCategory {
   parentCategoryId: number | null;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CategoryService {
   readonly http = inject(HttpClient);
 

@@ -13,6 +13,7 @@ import {
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtAuthHeaderWriterInterceptor } from './interceptors';
+import { JwtTokenStorageService } from './services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,5 +40,12 @@ export const appConfig: ApplicationConfig = {
     },
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideAnimationsAsync(),
+    JwtTokenStorageService,
+    JwtAuthHeaderWriterInterceptor,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useExisting: JwtAuthHeaderWriterInterceptor,
+      multi: true,
+    },
   ],
 };
